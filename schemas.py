@@ -14,3 +14,19 @@ class ProdutoResponse(ProdutoBase):
 
     class Config:
       from_attributes = True
+
+
+class ProfessoresBase(BaseModel):
+    nome: str
+    email: str
+    materia: str
+    idade: int
+
+class ProfessoresCreate(ProfessoresBase):
+    pass
+    
+class ProfessoresResponse(ProfessoresBase):
+    id: int
+
+    class Config:
+      from_attributes = True

@@ -2,8 +2,8 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from database import Base, engine, get_db
-from models import ProdutoDB
-from schemas import ProdutoCreate, ProdutoResponse
+from models import ProdutoDB, ProfessoresDB
+from schemas import ProdutoCreate, ProdutoResponse, ProfessoresResponse, ProfessoresCreate
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)  # cria as tabelas, se ainda não existirem
@@ -65,3 +65,48 @@ def atualizar_produto(produto_id: int, dados: ProdutoCreate, db:Session = Depend
     db.commit()
     db.refresh(produto)
     return produto
+
+
+@app.get('/professores', response_model=list[ProfessoresResponse])
+def listar_professores(db: Session = Depends(get_db)):
+    return db.query(ProfessoresDB).all()
+
+@app.get('/professores/{professores_id}', response_model=ProfessoresResponse)
+def obter_professores(professores_id: int, db: Session = Depends(get_db)):
+    professores = db.query(ProfessoresDB).filter(ProfessoresDB.id ==professores_id).first()
+    if professores is None:    
+        raise HTTPException(status_code=404, detail='professor não encontrado')
+    return professores
+
+
+@app.delete('/professores/{professores_id}', status_code=204)
+def remover_professores(professores_id: int, db: Session = Depends(get_db)):
+    professores = db.query(ProfessoresDB).filter(ProfessoresDB.id == professores_id).first()
+    if professores is None:
+        raise HTTPException(status_code=404, detail='professor não encontrado')
+    db.delete(professores)
+    db.commit()
+    return professores
+
+
+@app.post('/professores', response_model=ProfessoresResponse, status_code=201)
+def criar_professores(Professores: ProfessoresCreate, db: Session = Depends(get_db)):
+    novo_Professores = ProfessoresDB(**Professores.dict())
+    db.add(novo_Professores)
+    db.commit()
+    db.refresh(novo_Professores)
+    return novo_Professores
+
+@app.put('/professores/{professores_id}', response_model=ProfessoresResponse)
+def atualizar_professores(professores_id: int, dados: ProfessoresCreate, db:Session = Depends(get_db)):
+    professores = db.query(ProfessoresDB).filter(ProfessoresDB.id == professores_id).first()
+    if professores is None:
+        raise HTTPException(status_code=404, detail='Professor não encontrado')
+
+    professores.nome = dados.nome
+    professores.email = dados.email
+    professores.materia = dados.materia
+    professores.idade = dados.idade
+    db.commit()
+    db.refresh(professores)
+    return professores
