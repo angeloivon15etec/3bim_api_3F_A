@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05/08/2026 às 22:42
+-- Tempo de geração: 19/08/2026 às 22:57
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `loja`
 --
-CREATE DATABASE IF NOT EXISTS `loja` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `loja`;
 
 -- --------------------------------------------------------
 
@@ -41,8 +39,30 @@ CREATE TABLE `produtos` (
 --
 
 INSERT INTO `produtos` (`id`, `nome`, `preco`, `quantidade`) VALUES
-(1, 'chimarrão', 20.99, 5),
+(1, 'bolacha', 15.99, 25),
 (2, 'chimarrão', 20.99, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `professores`
+--
+
+CREATE TABLE `professores` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `materia` varchar(100) NOT NULL,
+  `idade` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `professores`
+--
+
+INSERT INTO `professores` (`id`, `nome`, `email`, `materia`, `idade`) VALUES
+(2, 'apucaticaits', 'apucaticaits@gmail.com', 'apucadas', 67),
+(3, 'bagaço', 'bagaço@gmail.com', 'bagça', 5);
 
 --
 -- Índices para tabelas despejadas
@@ -56,6 +76,13 @@ ALTER TABLE `produtos`
   ADD KEY `ix_produtos_id` (`id`);
 
 --
+-- Índices de tabela `professores`
+--
+ALTER TABLE `professores`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ix_professores_id` (`id`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -64,6 +91,12 @@ ALTER TABLE `produtos`
 --
 ALTER TABLE `produtos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `professores`
+--
+ALTER TABLE `professores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
